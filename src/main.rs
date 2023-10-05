@@ -2,11 +2,15 @@ use axum::{
     routing::{get, post},
     Extension, Router,
 };
+use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;
+use std::env;
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use dotenv::dotenv;
-use std::env;
+
+mod controllers;
+mod error;
+mod models;
 
 #[tokio::main]
 async fn main() {
@@ -32,6 +36,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async { "Hello, World!" }))
+        .route("/register", post(controllers::auth::register))
         .layer(cors)
         .layer(Extension(pool));
 
