@@ -1,3 +1,3 @@
 pub mod auth;
 pub mod note;
-pub mod healthChecker;
+pub mod health_checker;
