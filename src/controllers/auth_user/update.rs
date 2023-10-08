@@ -7,10 +7,7 @@ use axum::{
 use serde_json::json;
 use std::sync::Arc;
 
-use crate::{
-    models::auth_user::AuthUserModel, schema::auth_user::UpdateAuthUserSchema,
-    utils::fn_password::hash_password, AppState,
-};
+use crate::{models::auth_user::AuthUserModel, schema::auth_user::UpdateAuthUserSchema, AppState};
 
 // update auth_user
 pub async fn update_auth_user_handler(
@@ -32,7 +29,6 @@ pub async fn update_auth_user_handler(
 
     let now = chrono::Utc::now();
     let auth_user = query_result.unwrap();
-
 
     let query_result = sqlx::query_as!(
         AuthUserModel,
