@@ -1,10 +1,9 @@
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
     Json,
 };
-use serde_json::json;
 use std::sync::Arc;
 
 use crate::{models::note::NoteModel, AppState};
