@@ -2,4 +2,4 @@
 
 ## Description
 
-- This project is based on the followint article: [REST API](https://medium.com/intelliconnect-engineering/using-axum-framework-to-create-rest-api-part-1-7d434d2c5de4)
+- This project is based on the followint article: [REST API](https://codevoweb.com/rust-crud-api-example-with-axum-and-postgresql/)
