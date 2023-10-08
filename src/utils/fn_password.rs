@@ -16,7 +16,7 @@ pub async fn is_valid_password(stored_hash: &str, user_password: &str) -> bool {
 
     let parsed_hash = match PasswordHash::new(&stored_hash) {
         Ok(hash) => hash,
-        Err(e) => return false,
+        Err(_e) => return false,
     };
 
     let verify = Argon2::default().verify_password(byte_password, &parsed_hash);
