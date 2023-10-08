@@ -9,6 +9,7 @@ pub struct AuthUserModel {
     pub email: String,
     pub password: String,
     pub active: Option<bool>,
+    pub access_token: Option<String>,
     #[serde(rename = "createdAt")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(rename = "updatedAt")]

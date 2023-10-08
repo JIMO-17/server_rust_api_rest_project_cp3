@@ -1,6 +1,7 @@
 use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
 use serde_json::json;
 use std::sync::Arc;
+use uuid;
 
 use crate::{
     models::auth_user::AuthUserModel, schema::auth_user::CreateAuthUsetSchema,
@@ -36,8 +37,22 @@ pub async fn login_handler(
             let valid = is_valid_password(&auth_user.password, &body.password).await;
 
             if valid {
+                let access_token = uuid::Uuid::new_v4().to_string();
+
+                let _ = sqlx::query!(
+                    "UPDATE auth_users SET access_token = $1 WHERE id = $2",
+                    access_token,
+                    auth_user.id
+                )
+                .fetch_one(&data.db)
+                .await;
+
                 let auth_user_response = json!({"status": "success","data": json!({
-                    "auth_user": auth_user
+                    "auth_user": {
+                        "id": auth_user.id,
+                        "email": auth_user.email,
+                    },
+                    "access_token": access_token,
                 })});
 
                 return Ok((StatusCode::OK, Json(auth_user_response)));
