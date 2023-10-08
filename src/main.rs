@@ -10,10 +10,10 @@ use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use tower_http::cors::CorsLayer;
 
 mod controllers;
-mod error;
 mod models;
 mod routes;
 mod schema;
+mod utils;
 
 pub struct AppState {
     db: Pool<Postgres>,

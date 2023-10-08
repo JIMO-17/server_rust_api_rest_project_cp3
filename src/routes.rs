@@ -7,6 +7,7 @@ use axum::{
 
 use crate::{
     controllers::{
+        auth_user::{create_auth_user_handler, login_handler},
         health_checker::health_checker_handler,
         note::{
             create_note_handler, delete_note_handler, edit_note_handler, get_note_handler,
@@ -27,5 +28,7 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
                 .patch(edit_note_handler)
                 .delete(delete_note_handler),
         )
+        .route("/api/auth_user/", post(create_auth_user_handler))
+        .route("/api/auth_user/login", post(login_handler))
         .with_state(app_state)
 }
