@@ -14,7 +14,7 @@ pub async fn delete_auth_user_handler(
     Path(id): Path<uuid::Uuid>,
     State(data): State<Arc<AppState>>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    let rows_affected = sqlx::query!("DELETE FROM notes  WHERE id = $1", id)
+    let rows_affected = sqlx::query!("DELETE FROM auth_users WHERE id = $1", id)
         .execute(&data.db)
         .await
         .unwrap()
