@@ -17,6 +17,10 @@ use crate::{
             create_note_handler, delete_note_handler, edit_note_handler, get_note_handler,
             note_list_handler,
         },
+        admin::{
+            admin_list_handler, create_admin_handler, delete_admin_handler, get_admin_handler,
+            update_admin_handler,
+        }
     },
     AppState,
 };
@@ -44,6 +48,14 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
         .route(
             "/api/auth_user/access_token/:access_token",
             get(get_auth_user_by_access_token_handler),
+        )
+        .route("/api/admins", get(admin_list_handler))
+        .route("/api/admin/", post(create_admin_handler))
+        .route(
+            "/api/admin/:id",
+            get(get_admin_handler)
+                .patch(update_admin_handler)
+                .delete(delete_admin_handler),
         )
         .with_state(app_state)
 }
