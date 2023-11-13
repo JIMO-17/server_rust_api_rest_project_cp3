@@ -6,7 +6,7 @@ use axum::{
 };
 use std::sync::Arc;
 
-use crate::{models::admin::AdminModel, schema::auth_user::FilterOptions, AppState};
+use crate::{models::admin::AdminModel, schema::admin::FilterOptions, AppState};
 
 pub async fn admin_list_handler(
     opts: Option<Query<FilterOptions>>,
@@ -37,7 +37,7 @@ pub async fn admin_list_handler(
 
     let json_response = serde_json::json!({
         "status": "success",
-        "results": auth_users.len(),
+        "results": admins.len(),
         "admins": admins
     });
 

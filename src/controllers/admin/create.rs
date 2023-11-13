@@ -11,15 +11,15 @@ pub async fn create_admin_handler(
     Json(body): Json<CreateAdminSchema>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
     let query_result = sqlx::query_as!(
-        AuthUserModel,
+        AdminModel,
         "INSERT INTO admins (identification,identification_type,name,last_name,phonenumber,address,auth_user_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
         body.identification.to_string(),
         body.identification_type.to_string(),
         body.name.to_string(),
-        body.last_name.to_string(),
+        body.last_name,
         body.phonenumber.to_string(),
-        body.address.to_string(),
-        body.auth_user_id.to_string(),
+        body.address,
+        body.auth_user_id,
     )
     .fetch_one(&data.db)
     .await;

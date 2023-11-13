@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Deserialize, Debug, Default)]
 pub struct FilterOptions {
@@ -19,7 +20,7 @@ pub struct CreateAdminSchema {
     pub last_name: Option<String>,
     pub phonenumber: String,
     pub address: Option<String>,
-    pub auth_user_id: Option<String>,
+    pub auth_user_id: Option<Uuid>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -30,5 +31,5 @@ pub struct UpdateAdminSchema {
     pub last_name: Option<String>,
     pub phonenumber: Option<String>,
     pub address: Option<String>,
-    pub auth_user_id: Option<String>,
+    pub auth_user_id: Option<Uuid>,
 }
