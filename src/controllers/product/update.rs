@@ -35,8 +35,8 @@ pub async fn update_product_handler(
         "UPDATE products SET name = $1, description = $2, price = $3, stock = $4, updated_at = $5 WHERE id = $6 RETURNING *",
         body.name.to_owned().unwrap_or(product.name),
         body.description.to_owned().unwrap_or(product.description),
-        body.price.to_owned().unwrap_or(product.price.unwrap()),
-        body.stock.unwrap_or(product.stock.unwrap()),
+        body.price.to_owned().unwrap_or(product.price),
+        body.stock.unwrap_or(product.stock),
         now,
         id
     )
