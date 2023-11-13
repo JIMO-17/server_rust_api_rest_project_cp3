@@ -3,16 +3,16 @@ use serde_json::json;
 use std::sync::Arc;
 
 use crate::{
-    models::admin::AdminModel, schema::admin::CreateAdminSchema, AppState,
+    models::customer::CustomerModel, schema::customer::CreateCustomerSchema, AppState,
 };
 
-pub async fn create_admin_handler(
+pub async fn create_customer_handler(
     State(data): State<Arc<AppState>>,
-    Json(body): Json<CreateAdminSchema>,
+    Json(body): Json<CreateCustomerSchema>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
     let query_result = sqlx::query_as!(
-        AdminModel,
-        "INSERT INTO admins (identification,identification_type,name,last_name,phonenumber,address,auth_user_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        CustomerModel,
+        "INSERT INTO customers (identification,identification_type,name,last_name,phonenumber,address,auth_user_id, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
         body.identification.to_string(),
         body.identification_type.to_string(),
         body.name.to_string(),
@@ -20,17 +20,18 @@ pub async fn create_admin_handler(
         body.phonenumber.to_string(),
         body.address,
         body.auth_user_id,
+        body.email,
     )
     .fetch_one(&data.db)
     .await;
 
     match query_result {
-        Ok(admin) => {
-            let admin_response = json!({"status": "success","data": json!({
-                "admin": admin
+        Ok(customer) => {
+            let customer_response = json!({"status": "success","data": json!({
+                "customer": customer
             })});
 
-            return Ok((StatusCode::CREATED, Json(admin_response)));
+            return Ok((StatusCode::CREATED, Json(customer_response)));
         }
         Err(e) => {
             if e.to_string()
@@ -38,7 +39,7 @@ pub async fn create_admin_handler(
             {
                 let error_response = serde_json::json!({
                     "status": "fail",
-                    "message": "admin already exists",
+                    "message": "customer already exists",
                 });
                 return Err((StatusCode::CONFLICT, Json(error_response)));
             }

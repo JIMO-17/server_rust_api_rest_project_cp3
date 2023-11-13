@@ -20,6 +20,10 @@ use crate::{
         admin::{
             admin_list_handler, create_admin_handler, delete_admin_handler, get_admin_handler,
             update_admin_handler,
+        },
+        customer::{
+            create_customer_handler, customer_list_handler, delete_customer_handler,
+            get_customer_handler, update_customer_handler,
         }
     },
     AppState,
@@ -56,6 +60,14 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
             get(get_admin_handler)
                 .patch(update_admin_handler)
                 .delete(delete_admin_handler),
+        )
+        .route("/api/customers", get(customer_list_handler))
+        .route("/api/customer/", post(create_customer_handler))
+        .route(
+            "/api/customer/:id",
+            get(get_customer_handler)
+                .patch(update_customer_handler)
+                .delete(delete_customer_handler),
         )
         .with_state(app_state)
 }
