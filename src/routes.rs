@@ -7,28 +7,32 @@ use axum::{
 
 use crate::{
     controllers::{
+        admin::{
+            admin_list_handler, create_admin_handler, delete_admin_handler, get_admin_handler,
+            update_admin_handler,
+        },
         auth_user::{
             auth_user_list_handler, create_auth_user_handler, delete_auth_user_handler,
             get_auth_user_by_access_token_handler, get_auth_user_handler, login_handler,
             update_auth_user_handler,
+        },
+        customer::{
+            create_customer_handler, customer_list_handler, delete_customer_handler,
+            get_customer_handler, update_customer_handler,
         },
         health_checker::health_checker_handler,
         note::{
             create_note_handler, delete_note_handler, edit_note_handler, get_note_handler,
             note_list_handler,
         },
-        admin::{
-            admin_list_handler, create_admin_handler, delete_admin_handler, get_admin_handler,
-            update_admin_handler,
-        },
-        customer::{
-            create_customer_handler, customer_list_handler, delete_customer_handler,
-            get_customer_handler, update_customer_handler,
+        order::{
+            create_order_handler, delete_order_handler, get_order_handler, order_list_handler,
+            update_order_handler,
         },
         product::{
-            create_product_handler, delete_product_handler, update_product_handler,
-            get_product_handler, product_list_handler,
-        }
+            create_product_handler, delete_product_handler, get_product_handler,
+            product_list_handler, update_product_handler,
+        },
     },
     AppState,
 };
@@ -80,6 +84,14 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
             get(get_product_handler)
                 .patch(update_product_handler)
                 .delete(delete_product_handler),
+        )
+        .route("/api/orders", get(order_list_handler))
+        .route("/api/order/", post(create_order_handler))
+        .route(
+            "/api/order/:id",
+            get(get_order_handler)
+                .patch(update_order_handler)
+                .delete(delete_order_handler),
         )
         .with_state(app_state)
 }
