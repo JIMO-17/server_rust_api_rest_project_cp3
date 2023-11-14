@@ -3,13 +3,13 @@ use axum::http::{
     HeaderValue, Method,
 };
 use dotenv::dotenv;
-use std::sync::Arc;
 use std::env;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+use std::sync::Arc;
 
 use routes::create_router;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
-use tower_http::cors::CorsLayer;
+use tower_http::cors::{CorsLayer, Any};
 
 mod controllers;
 mod models;
@@ -46,14 +46,18 @@ async fn main() {
     let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), port);
 
     let cors = CorsLayer::new()
-        // .allow_origin("http://localhost:3000".parse::<HeaderValue>().unwrap())
+        // uncomment to prod thw followind line
+        .allow_origin(Any)
         .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE])
-        .allow_credentials(true)
+        // .allow_credentials(true)
         .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE]);
 
     let app = create_router(Arc::new(AppState { db: pool.clone() })).layer(cors);
 
     println!("🚀 Server started successfully");
+    println!("🚀 Server listening on port {}", port);
+    println!("🚀 Try it by going to: http://localhost:{}/api/healthchecker", port);
+
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
